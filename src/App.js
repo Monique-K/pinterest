@@ -3,10 +3,19 @@ import Nav from './nav/nav';
 import './App.scss';
 
 class App extends Component {
+  constructor() {
+    super();
+    this.state = {
+      username: "",
+      loggedIn: false,
+    }
+  }
+
+
   render() {
     return (
       <div className="App">
-        <Nav />
+        <Nav username={this.state.username} loggedIn={this.state.loggedIn}/>
       </div>
     );
   }
