@@ -64,7 +64,7 @@ githubSignout = () => {
 }
 
   render() {  
-    console.log("firebase", firebase)  
+    console.log("firebase", firebase.database().ref("images"))  
     return (
       <div className="App">
         <Nav 
