@@ -83,7 +83,7 @@ githubSignout = () => {
         <div className="main">
           
         </div>
-        <Pictures loggedIn={this.state.loggedIn} firebase={firebase} />
+        <Pictures loggedIn={this.state.loggedIn} user={this.state.username} />
       </div>
     );
   }
