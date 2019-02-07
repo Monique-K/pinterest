@@ -101,6 +101,8 @@ To Do:
 
 -imgs show up squished until hover
 
+-fix starred length
+
 
 */
 
