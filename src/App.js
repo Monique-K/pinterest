@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import Nav from './nav/nav';
 import Login from './login/login';
 import Pictures from './pictures/pictures';
-import * as firebase from 'firebase/app';
+import firebase from 'firebase';
+import { config } from './firebase/firebase';
+// import * as firebase from 'firebase/app';
 import './App.scss';
 
 
@@ -10,6 +12,10 @@ import './App.scss';
 class App extends Component {
   constructor() {
     super();
+
+    this.app = firebase.initializeApp(config);
+    this.database = this.app.database().ref().child("url")
+
     this.state = {
       username: "",
       loggedIn: false,
@@ -48,8 +54,8 @@ githubSignin = () => {
     var errorCode = error.code;
     var errorMessage = error.message;
   
-    console.log(error.code)
-    console.log(error.message)
+    console.log(errorCode)
+    console.log(errorMessage)
   });
 }
 
@@ -64,7 +70,7 @@ githubSignout = () => {
 }
 
   render() {  
-    console.log("firebase", firebase.database().ref("images"))  
+    // console.log("firebase", this.database)  
     return (
       <div className="App">
         <Nav 
