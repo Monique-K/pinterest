@@ -96,11 +96,10 @@ export default App;
 To Do: 
 
 - star and unstar pics if signed in
-- render pic divs from db
-
-- set up backend db: each image has an array with who starred it
 
 - switch config to env files 
+
+-imgs show up squished until hover
 
 
 */
