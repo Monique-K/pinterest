@@ -32,6 +32,8 @@ export default class Pictures extends Component {
     }
   }
 
+  // render empty stars if no authenticated user, or if authenticated user has not starred that image
+  // render a solid star if the authenticated user has starred that image
   showStarredImg = (img, num) => {
     let starredArray = img.starred
     if (this.state.user){
@@ -41,7 +43,6 @@ export default class Pictures extends Component {
         const star = {
           starred: "true",
           function: () => {
-            console.log("new like array", starredArray)
             firebase
             .database()
             .ref(`images`).child(num)
@@ -56,7 +57,6 @@ export default class Pictures extends Component {
         const star = {
           starred: "false",
           function: () => {
-            console.log("new like array", starredArray)
             firebase
             .database()
             .ref(`images`).child(num)
@@ -85,21 +85,36 @@ export default class Pictures extends Component {
     if (this.state.db) {
       const divArray = []
       let count = 0
-      // Unauthenicated users see all images
-      if (!this.state.loggedIn) {
-        this.state.db.forEach(cat => {
-          let starNum = cat.starred.length 
-          let isStarred = this.showStarredImg(cat, this.state.db.indexOf(cat))
-          let div = pictureDiv(cat.url, "cat", count, isStarred, starNum, false)
-          count ++
-          divArray.push(div)
-        })
-        return divArray
-      } 
-      // logged in users can filter images
-      if (this.state.loggedIn) {
+      // unauthenticated users
+      if (this.state.loggedIn === false) {
         if (this.state.filter === "") {
-          // before adding a search filter, logged in users see their starred images only
+          // Unauthenicated users see all images before searching
+          this.state.db.forEach(cat => {
+            let starNum = cat.starred.length 
+            let isStarred = this.showStarredImg(cat, this.state.db.indexOf(cat))
+            let div = pictureDiv(cat.url, "cat", count, isStarred, starNum, false)
+            count ++
+            divArray.push(div)
+          })
+          return divArray
+        } else if (this.state.filter !== "") {
+          // after searching for a user, see images owned or starred by that user
+          this.state.db.forEach(cat => {
+            if (cat.owner === this.state.filter || cat.starred.includes(this.state.filter)) {
+              let starNum = cat.starred.length 
+              let isStarred = this.showStarredImg(cat, this.state.db.indexOf(cat))
+              let div = pictureDiv(cat.url, "cat", count, isStarred, starNum, true, cat.url)
+              count ++
+              divArray.push(div)
+            }
+          })
+          return divArray
+        }
+      }
+      // authenticated users 
+      if (this.state.loggedIn === true) {
+        if (this.state.filter === "") {
+          // before adding a search filter, authenticated users see their starred images only
           this.state.db.forEach(cat => {
             if (cat.starred.includes(this.state.user)) {
               let starNum = cat.starred.length 
@@ -110,21 +125,20 @@ export default class Pictures extends Component {
             }
           })
           return divArray
+        } else if (this.state.filter !== "") {
+          // after searching for a user, see images owned or starred by that user
+          this.state.db.forEach(cat => {
+            if (cat.owner === this.state.filter || cat.starred.includes(this.state.filter)) {
+              let starNum = cat.starred.length 
+              let isStarred = this.showStarredImg(cat, this.state.db.indexOf(cat))
+              let div = pictureDiv(cat.url, "cat", count, isStarred, starNum, true, cat.url)
+              count ++
+              divArray.push(div)
+            }
+          })
+          return divArray
         }
       } 
-      // after searching for a user, logged in users see images owned or starred by that user
-      if (this.state.filter !== "") {
-        this.state.db.forEach(cat => {
-          if (cat.owner === this.state.filter || cat.starred.includes(this.state.filter)) {
-            let starNum = cat.starred.length 
-            let isStarred = this.showStarredImg(cat, this.state.db.indexOf(cat))
-            let div = pictureDiv(cat.url, "cat", count, isStarred, starNum, true, cat.url)
-            count ++
-            divArray.push(div)
-          }
-        })
-        return divArray
-      }
     }
   }
 

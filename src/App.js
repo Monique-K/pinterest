@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import Nav from './nav/nav';
-import Login from './login/login';
 import Pictures from './pictures/pictures';
 import firebase from 'firebase';
 import { config } from './firebase/firebase';
@@ -18,14 +17,12 @@ class App extends Component {
     this.state = {
       username: "",
       loggedIn: false,
-      modalIsActive: false,
       searchFilter: "",
-      title: ""
     }
   }
 
   setTitle = () => {
-    if (this.state.loggedIn === false) {
+    if (this.state.searchFilter === "" && this.state.loggedIn === false) {
       return "Browse Images"
     }
     if (this.state.loggedIn === true) {
@@ -33,11 +30,11 @@ class App extends Component {
         return "Your Starred Images"
       }
     } if (this.setState.searchFilter !== "") {
-      console.log("should work")
       return `${this.state.searchFilter}'s Images`
     }
   }
 
+  // click on your username to return to the list of your starred images
   goHome = () => {
     this.setState({searchFilter: ""})
   }
@@ -60,7 +57,7 @@ class App extends Component {
           })
         }
       })
-      this.setState({loggedIn: true, username: user.displayName})
+      this.setState({loggedIn: true, username: user.displayName, searchFilter: ""})
     }).catch(function(error) {
       let errorCode = error.code;
       let errorMessage = error.message;
@@ -96,35 +93,18 @@ class App extends Component {
           submit={this.onSearchSubmit}
           goHome={this.goHome}
         />
-        <Login active={this.state.modalIsActive} action={this.handleLoginClick} />
         <div className="main">
-          
+          <div className="main-title">{this.setTitle()}</div>
+          <Pictures 
+            loggedIn={this.state.loggedIn} 
+            user={this.state.username}
+            filter={this.state.searchFilter} 
+            />
         </div>
-        <div className="main-title">{this.setTitle()}</div>
-        <Pictures 
-          loggedIn={this.state.loggedIn} 
-          user={this.state.username}
-          filter={this.state.searchFilter} 
-        />
       </div>
     );
   }
 }
 
 export default App;
-
-
-/*
-To Do: 
-
-- logged in, get shortened url to image i starred: share button
-
-- redux 
-
-- show owner name on pic?
-
-- switch config to env files 
-
-
-*/
 

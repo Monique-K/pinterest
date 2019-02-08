@@ -16,7 +16,7 @@ export const pictureDiv = (src, alt, key, isStarred, starNum, loggedIn, click) =
       <img className="image" src={`${src}`} alt={alt}></img>
       <div className="bottom-bar">
         <div className="share-container">
-          {loggedIn ? <i class="fas fa-share-alt" onClick={() => console.log("Sharing not implemented yet :(")} ></i> : null}
+          {loggedIn ? <i className="fas fa-share-alt" onClick={() => console.log("Sharing not implemented yet :(")} ></i> : null}
         </div>
         <div className="star-container">
           {renderStar(isStarred)} 
