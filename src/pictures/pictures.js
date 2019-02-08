@@ -75,6 +75,10 @@ export default class Pictures extends Component {
       return star
     }
   }
+
+  share = () => {
+    
+  }
   
 
   renderPictures = () =>  {
@@ -86,7 +90,7 @@ export default class Pictures extends Component {
         this.state.db.forEach(cat => {
           let starNum = cat.starred.length 
           let isStarred = this.showStarredImg(cat, this.state.db.indexOf(cat))
-          let div = pictureDiv(cat.url, "cat", count, isStarred, starNum)
+          let div = pictureDiv(cat.url, "cat", count, isStarred, starNum, false)
           count ++
           divArray.push(div)
         })
@@ -100,7 +104,7 @@ export default class Pictures extends Component {
             if (cat.starred.includes(this.state.user)) {
               let starNum = cat.starred.length 
               let isStarred = this.showStarredImg(cat, this.state.db.indexOf(cat))
-              let div = pictureDiv(cat.url, "cat", count, isStarred, starNum)
+              let div = pictureDiv(cat.url, "cat", count, isStarred, starNum, true, cat.url)
               count ++
               divArray.push(div)
             }
@@ -114,7 +118,7 @@ export default class Pictures extends Component {
           if (cat.owner === this.state.filter || cat.starred.includes(this.state.filter)) {
             let starNum = cat.starred.length 
             let isStarred = this.showStarredImg(cat, this.state.db.indexOf(cat))
-            let div = pictureDiv(cat.url, "cat", count, isStarred, starNum)
+            let div = pictureDiv(cat.url, "cat", count, isStarred, starNum, true, cat.url)
             count ++
             divArray.push(div)
           }

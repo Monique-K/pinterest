@@ -26,21 +26,30 @@
   .bottom-bar {
     height: 10%;
     width: 100%;
+    color: $dark-red;
     display: flex;
-    justify-content: flex-end;
+    flex-direction: row;
+    justify-content: space-between;
     align-items: center;
     margin-right: 0.5rem;
-    padding-right: 2rem;
+    padding-right: 0.5rem;
 
     p {
       padding-left: 0.25rem;
       color: $dark-red;
     }
-  }
-  
-  .fa-star {
-    z-index: 10;
-    color: $dark-red;
+
+    .star-container {
+      height: 100%;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: flex-start;
+    }
+
+    .share-container {
+      margin-left: 0.55rem;
+    }
   }
 
 }
