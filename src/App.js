@@ -3,7 +3,6 @@ import Nav from './nav/nav';
 import Login from './login/login';
 import Pictures from './pictures/pictures';
 import firebase from 'firebase';
-// import admin from 'firebase-admin';
 import { config } from './firebase/firebase';
 import './App.scss';
 
@@ -27,39 +26,28 @@ class App extends Component {
 
   setTitle = () => {
     if (this.state.loggedIn === false) {
-      this.setState({title: "Browse Images"})
-      return 
+      return "Browse Images"
     }
     if (this.state.loggedIn === true) {
       if (this.state.searchFilter === "") {
-        this.setState({title: "Your Starred Images"})
-        return 
+        return "Your Starred Images"
       }
-    } else if (this.setState.searchFilter !== "") {
-      this.setState({title: `${this.state.searchFilter}'s Images`})
-      return 
+    } if (this.setState.searchFilter !== "") {
+      console.log("should work")
+      return `${this.state.searchFilter}'s Images`
     }
   }
 
-  componentDidMount = () => {
-    this.setTitle()
+  goHome = () => {
+    this.setState({searchFilter: ""})
   }
-
-  // componentDidUpdate = (prevProps, prevState) => {
-  //   if (this.state.title !== this.prevState) {
-  //     this.setTitle()
-  //   }
-  // }
 
   provider = new firebase.auth.GithubAuthProvider();
 
   githubSignin = () => {
     firebase.auth().signInWithPopup(this.provider)
-    
     .then((result) => {
-      // var token = result.credential.accessToken;
       const user = result.user;
-
       firebase.database().ref('users').on('value', (snapshot) =>{
         let keys = Object.keys(snapshot.val())
         if (!keys.includes(user.displayName)) {
@@ -72,21 +60,20 @@ class App extends Component {
           })
         }
       })
-      // console.log(token)
       this.setState({loggedIn: true, username: user.displayName})
     }).catch(function(error) {
-      var errorCode = error.code;
-      var errorMessage = error.message;
+      let errorCode = error.code;
+      let errorMessage = error.message;
     
       console.log(errorCode)
       console.log(errorMessage)
     });
   }
 
-  githubSignout = () => {
+  githubSignOut = () => {
     firebase.auth().signOut()
-    
-    .then(function() {
+    .then(() => {
+      this.setState({loggedIn: false, username: ""})
       console.log('Signout successful!')
     }, function(error) {
       console.log('Signout failed', error)
@@ -107,12 +94,13 @@ class App extends Component {
           signIn={this.githubSignin}
           signOut={this.githubSignOut}
           submit={this.onSearchSubmit}
+          goHome={this.goHome}
         />
         <Login active={this.state.modalIsActive} action={this.handleLoginClick} />
         <div className="main">
           
         </div>
-        <div className="main-title">{this.state.title}</div>
+        <div className="main-title">{this.setTitle()}</div>
         <Pictures 
           loggedIn={this.state.loggedIn} 
           user={this.state.username}
@@ -129,19 +117,13 @@ export default App;
 /*
 To Do: 
 
-- star and unstar pics if signed in
 - logged in, get shortened url to image i starred: share button
-- signout not working
 
-- redux
+- redux 
 
 - show owner name on pic?
 
 - switch config to env files 
-
--fix starred length
-
-- remove http2 and firebase admin if not used
 
 
 */

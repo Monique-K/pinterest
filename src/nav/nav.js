@@ -17,10 +17,11 @@ export default class Nav extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (this.props.loggedIn !== prevProps.loggedIn || this.props.username !== prevProps.username) {
+    if (this.props !== prevProps) {
       this.setState({
         username: this.props.username,
-        loggedIn: this.props.loggedIn
+        loggedIn: this.props.loggedIn,
+        searchText: ""
       })
     }
     if (this.props.filter !== prevProps.filter) {
@@ -28,6 +29,7 @@ export default class Nav extends Component {
     }
   }
 
+  // Display login/ Logout button depending on state
   welcomeLoginDiv = () => {
     if (!this.state.loggedIn) {
       return (
@@ -38,7 +40,7 @@ export default class Nav extends Component {
     } else {
       return (
         <div className="welcome-user">
-          <div className="welcome">Welcome {this.state.username}!</div>
+          <div className="welcome" onClick={this.props.goHome}>Welcome {this.state.username}!</div>
           <button className="button" onClick={this.props.signOut}>Sign Out</button>
         </div>
       )
@@ -50,7 +52,6 @@ export default class Nav extends Component {
   }
 
   
-
   render() {
     return (
       <div className="nav-container">

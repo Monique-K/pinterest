@@ -23,7 +23,7 @@ export default class Pictures extends Component {
   
   
   componentDidUpdate(prevProps, prevState) {
-    if (this.props.loggedIn !== prevProps.loggedIn || this.props.user !== prevProps.user || this.props.filter !== prevProps.filter) {
+    if (this.props !== prevProps) {
       this.setState({
         loggedIn: this.props.loggedIn, 
         user: this.props.user, 
@@ -31,19 +31,6 @@ export default class Pictures extends Component {
       })
     }
   }
-
-  // firebase.database().ref('users').on('value', (snapshot) =>{
-  //   let keys = Object.keys(snapshot.val())
-  //   if (!keys.includes(user.displayName)) {
-  //     // Add a new user to the users database
-  //     firebase
-  //     .database()
-  //     .ref(`users/${user.displayName}`)
-  //     .set({
-  //       name: user.displayName
-  //     })
-  //   }
-  // })
 
   showStarredImg = (img, num) => {
     let starredArray = img.starred
@@ -54,6 +41,7 @@ export default class Pictures extends Component {
         const star = {
           starred: "true",
           function: () => {
+            console.log("new like array", starredArray)
             firebase
             .database()
             .ref(`images`).child(num)
@@ -68,6 +56,7 @@ export default class Pictures extends Component {
         const star = {
           starred: "false",
           function: () => {
+            console.log("new like array", starredArray)
             firebase
             .database()
             .ref(`images`).child(num)
