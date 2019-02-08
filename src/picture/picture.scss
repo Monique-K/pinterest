@@ -1,0 +1,46 @@
+@import '../common.scss';
+
+.picture-div {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  border: 2px solid $red;
+  box-sizing: border-box;
+  height: 15rem;
+  width: auto;
+  max-width: 20rem;
+  padding: 5px;
+  margin: 1rem;
+  border-radius: 10px;
+  background-color: $light-grey;
+  &:hover {
+    border: 3px solid $dark-red;
+  }
+
+  img {
+    height: 90%;
+    margin: auto;
+  }
+
+  .bottom-bar {
+    height: 10%;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-right: 0.5rem;
+    padding-right: 2rem;
+
+    p {
+      padding-left: 0.25rem;
+      color: $dark-red;
+    }
+  }
+  
+  .fa-star {
+    z-index: 10;
+    color: $dark-red;
+  }
+
+}

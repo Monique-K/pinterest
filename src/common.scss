@@ -1,0 +1,19 @@
+$beige: rgb(189, 189, 168);
+$red: rgb(214, 68, 68);
+$dark-red: rgb(134, 27, 27);
+$dark-grey: rgb(141, 136, 136);
+$light-grey: rgb(214, 193, 193);
+$gold: rgb(255, 251, 0);
+
+.button {
+  height: 2.5rem;
+  font-size: 1.25rem;
+  color: white;
+  font-weight: 500;
+  background-color: $red;
+  border: 1px solid white;
+  border-radius: 5px;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  padding-bottom: 0.5rem;
+}
