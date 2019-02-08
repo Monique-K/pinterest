@@ -3,8 +3,8 @@ import Nav from './nav/nav';
 import Login from './login/login';
 import Pictures from './pictures/pictures';
 import firebase from 'firebase';
+// import admin from 'firebase-admin';
 import { config } from './firebase/firebase';
-// import * as firebase from 'firebase/app';
 import './App.scss';
 
 
@@ -20,70 +20,104 @@ class App extends Component {
       username: "",
       loggedIn: false,
       modalIsActive: false,
+      searchFilter: "",
+      title: ""
     }
   }
 
-  githubLogin = () => {
-    const provider = new firebase.auth.githubAuthProvider();
-    firebase.auth.signInWithPopup(provider)
-    .then(result => {
-      const user = result.user
-      console.log(user)
-    })
+  setTitle = () => {
+    if (this.state.loggedIn === false) {
+      this.setState({title: "Browse Images"})
+      return 
+    }
+    if (this.state.loggedIn === true) {
+      if (this.state.searchFilter === "") {
+        this.setState({title: "Your Starred Images"})
+        return 
+      }
+    } else if (this.setState.searchFilter !== "") {
+      this.setState({title: `${this.state.searchFilter}'s Images`})
+      return 
+    }
   }
 
-
-  handleLoginClick = () => {
-    console.log("click")
-    this.setState({modalIsActive: true})
+  componentDidMount = () => {
+    this.setTitle()
   }
 
-provider = new firebase.auth.GithubAuthProvider();
+  // componentDidUpdate = (prevProps, prevState) => {
+  //   if (this.state.title !== this.prevState) {
+  //     this.setTitle()
+  //   }
+  // }
 
-githubSignin = () => {
-  firebase.auth().signInWithPopup(this.provider)
-  
-  .then((result) => {
-    // var token = result.credential.accessToken;
-    var user = result.user;
-  
-    // console.log(token)
-    console.log(user)
-    this.setState({loggedIn: true, username: user.displayName})
-  }).catch(function(error) {
-    var errorCode = error.code;
-    var errorMessage = error.message;
-  
-    console.log(errorCode)
-    console.log(errorMessage)
-  });
-}
+  provider = new firebase.auth.GithubAuthProvider();
 
-githubSignout = () => {
-  firebase.auth().signOut()
-  
-  .then(function() {
-    console.log('Signout successful!')
-  }, function(error) {
-    console.log('Signout failed')
-  });
-}
+  githubSignin = () => {
+    firebase.auth().signInWithPopup(this.provider)
+    
+    .then((result) => {
+      // var token = result.credential.accessToken;
+      const user = result.user;
+
+      firebase.database().ref('users').on('value', (snapshot) =>{
+        let keys = Object.keys(snapshot.val())
+        if (!keys.includes(user.displayName)) {
+          // Add a new user to the users database
+          firebase
+          .database()
+          .ref(`users/${user.displayName}`)
+          .set({
+            name: user.displayName
+          })
+        }
+      })
+      // console.log(token)
+      this.setState({loggedIn: true, username: user.displayName})
+    }).catch(function(error) {
+      var errorCode = error.code;
+      var errorMessage = error.message;
+    
+      console.log(errorCode)
+      console.log(errorMessage)
+    });
+  }
+
+  githubSignout = () => {
+    firebase.auth().signOut()
+    
+    .then(function() {
+      console.log('Signout successful!')
+    }, function(error) {
+      console.log('Signout failed', error)
+    });
+  }
+
+  onSearchSubmit = (e, text) => {
+    e.preventDefault()
+    this.setState({searchFilter: text})
+  }
 
   render() {  
-    // console.log("firebase", this.database)  
     return (
       <div className="App">
         <Nav 
           username={this.state.username} 
           loggedIn={this.state.loggedIn} 
           signIn={this.githubSignin}
-          signOut={this.signOut}
+          signOut={this.githubSignOut}
+          submit={this.onSearchSubmit}
         />
         <Login active={this.state.modalIsActive} action={this.handleLoginClick} />
         <div className="main">
           
         </div>
-        <Pictures loggedIn={this.state.loggedIn} user={this.state.username} />
+        <div className="main-title">{this.state.title}</div>
+        <Pictures 
+          loggedIn={this.state.loggedIn} 
+          user={this.state.username}
+          filter={this.state.searchFilter} 
+        />
       </div>
     );
   }
@@ -96,12 +130,18 @@ export default App;
 To Do: 
 
 - star and unstar pics if signed in
+- logged in, get shortened url to image i starred: share button
+- signout not working
+
+- redux
+
+- show owner name on pic?
 
 - switch config to env files 
 
--imgs show up squished until hover
-
 -fix starred length
+
+- remove http2 and firebase admin if not used
 
 
 */

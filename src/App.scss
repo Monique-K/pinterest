@@ -1,7 +1,14 @@
+@import './common.scss';
+
 .App {
   text-align: center;
 }
 
   .main {
     padding-top: 5rem;
+  }
+
+  .main-title {
+    height: 3rem;
+    color: $red;
   }
