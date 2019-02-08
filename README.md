@@ -10,12 +10,10 @@ Run `npm install` to start it up.
 
 ## Features
 
-Log in with your Github account. Now you can star and unstar images. When you first log in, or click your name in the nav bar, you'll see all the images you have starred. 
+Log in with your Github account. Now you can star and unstar images. When you first log in, or when you click your name in the nav bar, you'll see all the images you have starred. Search for another user's name to see all of their images.
 
 ![Main Page](https://github.com/Monique-K/pinterest/blob/master/src/images/main-pg.png)
 
-
-Search for another user's name to see all of their images. 
 
 ### Upcoming Features
 
