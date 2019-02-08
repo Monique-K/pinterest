@@ -17,7 +17,7 @@ Log in with your Github account. Now you can star and unstar images. When you fi
 
 Search for another user's name to see all of their images. 
 
-## Upcoming Features
+### Upcoming Features
 
 Click the share link under an image to share it with your friends. Soon to come!
 
